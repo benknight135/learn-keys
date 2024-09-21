@@ -68,7 +68,7 @@ function drawStaff(ctx) {
 
 function drawTrebleClef(ctx) {
     ctx.save();
-    ctx.translate(50, 30);
+    ctx.translate(50, 150);
     ctx.scale(1.5, 1.5);
     ctx.font = "48px Bravura, Maestro, serif";
     ctx.fillText("𝄞", 0, 0);
