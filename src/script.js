@@ -17,14 +17,29 @@ const keySignatures = {
 };
 
 const sharpPositions = {
-    "F": 1.5, "C": 3, "G": 2, "D": 4,
-    "A": 2.5, "E": 3.5, "B": 1
+    'F': 4,
+    'C': 1,
+    'G': 5,
+    'D': 2,
+    'A': -1,
+    'E': 3,
+    'B': 0
 };
 
 const flatPositions = {
-    "B": 1, "E": 3.5, "A": 2.5, "D": 4,
-    "G": 2, "C": 3, "F": 1.5
+    'B': 0,
+    'E': 3,
+    'A': -1,
+    'D': 2,
+    'G': -2,
+    'C': 1,
+    'F': -3
 };
+
+const staffTop = 50;
+const lineSpacing = 20;
+
+let lastKeySignature = null;
 
 let currentKeySignature = getRandomKeySignature();
 drawKeySignature(currentKeySignature);
@@ -32,7 +47,12 @@ displayOptions(currentKeySignature);
 
 function getRandomKeySignature() {
     const keys = Object.keys(keySignatures);
-    return keys[Math.floor(Math.random() * keys.length)];
+    let newKeySignature;
+    do {
+        newKeySignature = keys[Math.floor(Math.random() * keys.length)];
+    } while (newKeySignature === lastKeySignature);
+    lastKeySignature = newKeySignature;
+    return newKeySignature;
 }
 
 function drawKeySignature(key) {
@@ -54,9 +74,6 @@ function drawKeySignature(key) {
 }
 
 function drawStaff(ctx) {
-    const staffTop = 50;
-    const lineSpacing = 20;
-
     ctx.lineWidth = 2;
     for (let i = 0; i < 5; i++) {
         ctx.beginPath();
@@ -68,7 +85,7 @@ function drawStaff(ctx) {
 
 function drawTrebleClef(ctx) {
     ctx.save();
-    ctx.translate(50, 150);
+    ctx.translate(50, 110);
     ctx.scale(1.5, 1.5);
     ctx.font = "48px Bravura, Maestro, serif";
     ctx.fillText("𝄞", 0, 0);
@@ -77,7 +94,9 @@ function drawTrebleClef(ctx) {
 
 function drawSharp(ctx, index, note) {
     const x = 100 + index * 30;
-    const y = getNotePosition(sharpPositions[note]);
+    const offset = 5;
+    var y = getNotePosition(sharpPositions[note]);
+    y += offset;
 
     ctx.font = "48px Bravura, Maestro, serif";
     ctx.fillText("♯", x, y);
@@ -92,10 +111,8 @@ function drawFlat(ctx, index, note) {
 }
 
 function getNotePosition(position) {
-    const lineSpacing = 20;
-    const staffTop = 50;
-
-    return staffTop + (position * (lineSpacing / 2));
+    const offset = 8;
+    return staffTop + (4 - position) * (lineSpacing / 2) + offset;
 }
 
 function displayOptions(correctKey) {
