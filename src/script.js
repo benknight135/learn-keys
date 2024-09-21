@@ -1,19 +1,19 @@
 const keySignatures = {
-    "C": [],
-    "G": ["F#"],
-    "D": ["F#", "C#"],
-    "A": ["F#", "C#", "G#"],
-    "E": ["F#", "C#", "G#", "D#"],
-    "B": ["F#", "C#", "G#", "D#", "A#"],
-    "F#": ["F#", "C#", "G#", "D#", "A#", "E#"],
-    "C#": ["F#", "C#", "G#", "D#", "A#", "E#", "B#"],
-    "F": ["Bb"],
-    "Bb": ["Bb", "Eb"],
-    "Eb": ["Bb", "Eb", "Ab"],
-    "Ab": ["Bb", "Eb", "Ab", "Db"],
-    "Db": ["Bb", "Eb", "Ab", "Db", "Gb"],
-    "Gb": ["Bb", "Eb", "Ab", "Db", "Gb", "Cb"],
-    "Cb": ["Bb", "Eb", "Ab", "Db", "Gb", "Cb", "Fb"]
+    "C Major / A Minor": [],
+    "G Major / E Minor": ["F#"],
+    "D Major / B Minor": ["F#", "C#"],
+    "A Major / F# Minor": ["F#", "C#", "G#"],
+    "E Major / C# Minor": ["F#", "C#", "G#", "D#"],
+    "B Major / G# Minor": ["F#", "C#", "G#", "D#", "A#"],
+    "F# Major / D# Minor": ["F#", "C#", "G#", "D#", "A#", "E#"],
+    "C# Major / A# Minor": ["F#", "C#", "G#", "D#", "A#", "E#", "B#"],
+    "F Major / D Minor": ["Bb"],
+    "Bb Major / G Minor": ["Bb", "Eb"],
+    "Eb Major / C Minor": ["Bb", "Eb", "Ab"],
+    "Ab Major / F Minor": ["Bb", "Eb", "Ab", "Db"],
+    "Db Major / Bb Minor": ["Bb", "Eb", "Ab", "Db", "Gb"],
+    "Gb Major / Eb Minor": ["Bb", "Eb", "Ab", "Db", "Gb", "Cb"],
+    "Cb Major / Ab Minor": ["Bb", "Eb", "Ab", "Db", "Gb", "Cb", "Fb"]
 };
 
 const sharpPositions = ["F", "C", "G", "D", "A", "E", "B"];
@@ -101,7 +101,7 @@ function displayOptions(correctKey) {
     const options = [correctKey];
     while (options.length < 3) {
         const randomKey = shuffledKeys.pop();
-        if (randomKey !== correctKey) {
+        if (!options.includes(randomKey)) {
             options.push(randomKey);
         }
     }
@@ -109,7 +109,7 @@ function displayOptions(correctKey) {
     // Shuffle the options
     options.sort(() => 0.5 - Math.random());
 
-    // Display the options as buttons
+    // Display the options as buttons with full names
     options.forEach(option => {
         const button = document.createElement("button");
         button.textContent = option;
