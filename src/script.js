@@ -16,8 +16,25 @@ const keySignatures = {
     "Cb Major / Ab Minor": ["Bb", "Eb", "Ab", "Db", "Gb", "Cb", "Fb"]
 };
 
-const sharpPositions = ["F", "C", "G", "D", "A", "E", "B"];
-const flatPositions = ["B", "E", "A", "D", "G", "C", "F"];
+const sharpPositions = {
+    "F": 1.5,
+    "C": 3,
+    "G": 2,
+    "D": 4,
+    "A": 2.5,
+    "E": 3.5,
+    "B": 1
+};
+
+const flatPositions = {
+    "B": 1,
+    "E": 3.5,
+    "A": 2.5,
+    "D": 4,
+    "G": 2,
+    "C": 3,
+    "F": 1.5
+};
 
 // Select a random key signature to display
 let currentKeySignature = getRandomKeySignature();
@@ -65,29 +82,26 @@ function drawStaff(ctx) {
 }
 
 function drawSharp(ctx, index, note) {
-    const position = sharpPositions.indexOf(note);
     const x = 100 + index * 30;
-    const y = getNotePosition(position, false);
+    const y = getNotePosition(sharpPositions[note]);
 
     ctx.font = "24px Arial";
     ctx.fillText("#", x, y);
 }
 
 function drawFlat(ctx, index, note) {
-    const position = flatPositions.indexOf(note);
     const x = 100 + index * 30;
-    const y = getNotePosition(position, true);
+    const y = getNotePosition(flatPositions[note]);
 
     ctx.font = "24px Arial";
     ctx.fillText("b", x, y);
 }
 
-function getNotePosition(position, isFlat) {
+function getNotePosition(position) {
     const lineSpacing = 20;
     const staffTop = 50;
 
-    const offset = isFlat ? -1 : 0;  // Flats tend to be positioned slightly lower
-    return staffTop + (4 - position) * (lineSpacing / 2) + offset;
+    return staffTop + (position * (lineSpacing / 2));
 }
 
 function displayOptions(correctKey) {
