@@ -17,26 +17,15 @@ const keySignatures = {
 };
 
 const sharpPositions = {
-    "F": 1.5,
-    "C": 3,
-    "G": 2,
-    "D": 4,
-    "A": 2.5,
-    "E": 3.5,
-    "B": 1
+    "F": 1.5, "C": 3, "G": 2, "D": 4,
+    "A": 2.5, "E": 3.5, "B": 1
 };
 
 const flatPositions = {
-    "B": 1,
-    "E": 3.5,
-    "A": 2.5,
-    "D": 4,
-    "G": 2,
-    "C": 3,
-    "F": 1.5
+    "B": 1, "E": 3.5, "A": 2.5, "D": 4,
+    "G": 2, "C": 3, "F": 1.5
 };
 
-// Select a random key signature to display
 let currentKeySignature = getRandomKeySignature();
 drawKeySignature(currentKeySignature);
 displayOptions(currentKeySignature);
@@ -50,13 +39,9 @@ function drawKeySignature(key) {
     const canvas = document.getElementById("staff-canvas");
     const ctx = canvas.getContext("2d");
 
-    // Clear the canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Draw the staff lines
     drawStaff(ctx);
 
-    // Draw sharps or flats based on the key signature
     const signature = keySignatures[key];
     signature.forEach((note, index) => {
         if (note.endsWith("#")) {
@@ -72,7 +57,6 @@ function drawStaff(ctx) {
     const lineSpacing = 20;
 
     ctx.lineWidth = 2;
-
     for (let i = 0; i < 5; i++) {
         ctx.beginPath();
         ctx.moveTo(50, staffTop + i * lineSpacing);
@@ -85,16 +69,16 @@ function drawSharp(ctx, index, note) {
     const x = 100 + index * 30;
     const y = getNotePosition(sharpPositions[note]);
 
-    ctx.font = "24px Arial";
-    ctx.fillText("#", x, y);
+    ctx.font = "30px Bravura, Maestro, serif";
+    ctx.fillText("♯", x, y);
 }
 
 function drawFlat(ctx, index, note) {
     const x = 100 + index * 30;
     const y = getNotePosition(flatPositions[note]);
 
-    ctx.font = "24px Arial";
-    ctx.fillText("b", x, y);
+    ctx.font = "30px Bravura, Maestro, serif";
+    ctx.fillText("♭", x, y);
 }
 
 function getNotePosition(position) {
@@ -106,12 +90,11 @@ function getNotePosition(position) {
 
 function displayOptions(correctKey) {
     const optionsContainer = document.getElementById("quiz-options");
-    optionsContainer.innerHTML = ''; // Clear previous options
+    optionsContainer.innerHTML = '';
 
     const keys = Object.keys(keySignatures);
-    const shuffledKeys = keys.sort(() => 0.5 - Math.random()); // Shuffle the keys
+    const shuffledKeys = keys.sort(() => 0.5 - Math.random());
 
-    // Pick the correct answer and two random wrong answers
     const options = [correctKey];
     while (options.length < 3) {
         const randomKey = shuffledKeys.pop();
@@ -120,10 +103,8 @@ function displayOptions(correctKey) {
         }
     }
 
-    // Shuffle the options
     options.sort(() => 0.5 - Math.random());
 
-    // Display the options as buttons with full names
     options.forEach(option => {
         const button = document.createElement("button");
         button.textContent = option;
@@ -134,15 +115,9 @@ function displayOptions(correctKey) {
 
 function checkAnswer(selectedKey, correctKey) {
     const resultDiv = document.getElementById("result");
-    if (selectedKey === correctKey) {
-        resultDiv.textContent = "Correct!";
-        resultDiv.style.color = "green";
-    } else {
-        resultDiv.textContent = `Incorrect. The correct answer was ${correctKey}.`;
-        resultDiv.style.color = "red";
-    }
+    resultDiv.textContent = selectedKey === correctKey ? "Correct!" : `Incorrect. The correct answer was ${correctKey}.`;
+    resultDiv.style.color = selectedKey === correctKey ? "green" : "red";
 
-    // Display a new random key signature after 2 seconds
     setTimeout(() => {
         resultDiv.textContent = "";
         currentKeySignature = getRandomKeySignature();
