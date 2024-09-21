@@ -41,6 +41,7 @@ function drawKeySignature(key) {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawStaff(ctx);
+    drawTrebleClef(ctx);
 
     const signature = keySignatures[key];
     signature.forEach((note, index) => {
@@ -65,11 +66,20 @@ function drawStaff(ctx) {
     }
 }
 
+function drawTrebleClef(ctx) {
+    ctx.save();
+    ctx.translate(50, 30);
+    ctx.scale(1.5, 1.5);
+    ctx.font = "48px Bravura, Maestro, serif";
+    ctx.fillText("𝄞", 0, 0);
+    ctx.restore();
+}
+
 function drawSharp(ctx, index, note) {
     const x = 100 + index * 30;
     const y = getNotePosition(sharpPositions[note]);
 
-    ctx.font = "30px Bravura, Maestro, serif";
+    ctx.font = "48px Bravura, Maestro, serif";
     ctx.fillText("♯", x, y);
 }
 
@@ -77,7 +87,7 @@ function drawFlat(ctx, index, note) {
     const x = 100 + index * 30;
     const y = getNotePosition(flatPositions[note]);
 
-    ctx.font = "30px Bravura, Maestro, serif";
+    ctx.font = "48px Bravura, Maestro, serif";
     ctx.fillText("♭", x, y);
 }
 
