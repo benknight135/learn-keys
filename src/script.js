@@ -19,12 +19,15 @@ const keySignatures = {
 const sharpPositions = ["F", "C", "G", "D", "A", "E", "B"];
 const flatPositions = ["B", "E", "A", "D", "G", "C", "F"];
 
-document.querySelectorAll("#key-buttons button").forEach(button => {
-    button.addEventListener("click", () => {
-        const key = button.getAttribute("data-key");
-        drawKeySignature(key);
-    });
-});
+// Select a random key signature to display
+let currentKeySignature = getRandomKeySignature();
+drawKeySignature(currentKeySignature);
+displayOptions(currentKeySignature);
+
+function getRandomKeySignature() {
+    const keys = Object.keys(keySignatures);
+    return keys[Math.floor(Math.random() * keys.length)];
+}
 
 function drawKeySignature(key) {
     const canvas = document.getElementById("staff-canvas");
@@ -85,4 +88,51 @@ function getNotePosition(position, isFlat) {
 
     const offset = isFlat ? -1 : 0;  // Flats tend to be positioned slightly lower
     return staffTop + (4 - position) * (lineSpacing / 2) + offset;
+}
+
+function displayOptions(correctKey) {
+    const optionsContainer = document.getElementById("quiz-options");
+    optionsContainer.innerHTML = ''; // Clear previous options
+
+    const keys = Object.keys(keySignatures);
+    const shuffledKeys = keys.sort(() => 0.5 - Math.random()); // Shuffle the keys
+
+    // Pick the correct answer and two random wrong answers
+    const options = [correctKey];
+    while (options.length < 3) {
+        const randomKey = shuffledKeys.pop();
+        if (randomKey !== correctKey) {
+            options.push(randomKey);
+        }
+    }
+
+    // Shuffle the options
+    options.sort(() => 0.5 - Math.random());
+
+    // Display the options as buttons
+    options.forEach(option => {
+        const button = document.createElement("button");
+        button.textContent = option;
+        button.addEventListener("click", () => checkAnswer(option, correctKey));
+        optionsContainer.appendChild(button);
+    });
+}
+
+function checkAnswer(selectedKey, correctKey) {
+    const resultDiv = document.getElementById("result");
+    if (selectedKey === correctKey) {
+        resultDiv.textContent = "Correct!";
+        resultDiv.style.color = "green";
+    } else {
+        resultDiv.textContent = `Incorrect. The correct answer was ${correctKey}.`;
+        resultDiv.style.color = "red";
+    }
+
+    // Display a new random key signature after 2 seconds
+    setTimeout(() => {
+        resultDiv.textContent = "";
+        currentKeySignature = getRandomKeySignature();
+        drawKeySignature(currentKeySignature);
+        displayOptions(currentKeySignature);
+    }, 2000);
 }
